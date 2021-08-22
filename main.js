@@ -1,4 +1,7 @@
-const { app, BrowserWindow, screen } = require("electron");
+const { app, BrowserWindow, screen, session } = require("electron");
+const path = require("path");
+const { ElectronBlocker } = require("@cliqz/adblocker-electron");
+const fetch = require("cross-fetch");
 
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -7,7 +10,7 @@ function createWindow() {
     width: width * 0.9,
     height: height * 0.9,
     autoHideMenuBar: true,
-    icon: require("path").join("logo.png"),
+    icon: path.join(__dirname, "logo.png"),
   });
 
   mainWindow.loadURL("https://deezer.com/", {
@@ -16,14 +19,10 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+app.whenReady().then(async () => {
+  ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    blocker.enableBlockingInSession(session.defaultSession);
   });
-});
 
-app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") app.quit();
+  createWindow();
 });
