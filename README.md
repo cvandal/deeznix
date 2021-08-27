@@ -31,4 +31,3 @@ Deeznix is an unoffical Deezer desktop application for Ubuntu and Fedora. It's r
 ## Known Issues
 
 1. Music must be paused before you can close the application. This is because the Deezer website prompts you to confirm that you'd like to leave the page when music is playing and that prompt isn't visible in Deeznix.
-2. Desktop notifications do not work.
